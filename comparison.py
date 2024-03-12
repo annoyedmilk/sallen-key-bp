@@ -57,8 +57,8 @@ def plot_data_comparison(ltspice_filepath, picoscope_filepath):
 
 # Generate file paths dynamically
 base_dir = get_base_dir()
-ltspice_filepath = os.path.join(base_dir, 'LTSPICE', 'sallen-key-lp.txt')
-picoscope_filepath = os.path.join(base_dir, 'PicoScope', 'outputsallen-key-lp.csv')
+ltspice_filepath = os.path.join(base_dir, 'LTSPICE', 'sallen-key-tp.txt')
+picoscope_filepath = os.path.join(base_dir, 'PicoScope', 'outputsallen-key-tp.csv')
 
 # Example usage
 plot_data_comparison(ltspice_filepath, picoscope_filepath)
