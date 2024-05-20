@@ -2,3 +2,4 @@
 *.net
 *.raw
 .DS_Store
+*.tmp
