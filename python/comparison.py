@@ -35,9 +35,6 @@ def load_ltspice_data(filepath):
 
         ltspice_data['Phase (deg)'] = np.unwrap(np.deg2rad(ltspice_data['Phase (deg)'] - 180)) * (180 / np.pi)
         
-        print("LTSpice Data:")
-        print(ltspice_data.head())
-        
         return ltspice_data
     except Exception as e:
         print(f"Error loading LTSpice data: {e}")
@@ -52,9 +49,6 @@ def load_matlab_data(filepath):
             'Magnitude_dB': 'Magnitude (dB)',
             'Phase_deg': 'Phase (deg)'
         })
-        
-        print("MATLAB Data:")
-        print(matlab_data.head())
         
         return matlab_data
     except Exception as e:
@@ -74,23 +68,45 @@ def load_picoscope_data(filepath):
         # Convert logarithmic frequency to linear frequency
         picoscope_data['Frequency (Hz)'] = 10 ** picoscope_data['Frequency Log(Hz)']
         
-        print("Picoscope Data:")
-        print(picoscope_data.head())
-        
         return picoscope_data
     except Exception as e:
         print(f"Error loading Picoscope data: {e}")
         return pd.DataFrame()
 
-def plot_data_comparison(ltspice_filepath, matlab_filepath, picoscope_filepath):
-    ltspice_data = load_ltspice_data(ltspice_filepath)
-    matlab_data = load_matlab_data(matlab_filepath)
-    picoscope_data = load_picoscope_data(picoscope_filepath)
+def plot_ltspice_data(ltspice_data):
+    plt.figure(figsize=(10, 6))
+    plt.semilogx(ltspice_data['Frequency (Hz)'], ltspice_data['Magnitude (dB)'], label='Magnitude')
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Magnitude (dB)')
+    plt.title('LTSpice Data')
+    plt.legend()
+    plt.savefig('ltspice_plot.png')
+    plt.show()
 
+def plot_matlab_data(matlab_data):
+    plt.figure(figsize=(10, 6))
+    plt.semilogx(matlab_data['Frequency (Hz)'], matlab_data['Magnitude (dB)'], label='Magnitude')
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Magnitude (dB)')
+    plt.title('MATLAB Data')
+    plt.legend()
+    plt.savefig('matlab_plot.png')
+    plt.show()
+
+def plot_picoscope_data(picoscope_data):
+    plt.figure(figsize=(10, 6))
+    plt.semilogx(picoscope_data['Frequency (Hz)'], picoscope_data['Magnitude (dB)'], label='Magnitude')
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Magnitude (dB)')
+    plt.title('Picoscope Data')
+    plt.legend()
+    plt.savefig('picoscope_plot.png')
+    plt.show()
+
+def plot_data_comparison(ltspice_data, matlab_data, picoscope_data):
     plt.figure(figsize=(18, 6))
 
     # Magnitude Comparison
-    plt.subplot(1, 1, 1)
     plt.semilogx(ltspice_data['Frequency (Hz)'], ltspice_data['Magnitude (dB)'], label='LTSpice Magnitude')
     plt.semilogx(matlab_data['Frequency (Hz)'], matlab_data['Magnitude (dB)'], label='MATLAB Magnitude', linestyle=':')
     plt.semilogx(picoscope_data['Frequency (Hz)'], picoscope_data['Magnitude (dB)'], label='Picoscope Magnitude', linestyle='--')
@@ -110,5 +126,13 @@ ltspice_filepath = base_dir / 'LTSpice-Simulation.txt'
 matlab_filepath = base_dir / 'Matlab-Simualtion.csv'
 picoscope_filepath = base_dir / 'outputsallen-key-overall.csv'
 
-# Example usage
-plot_data_comparison(ltspice_filepath, matlab_filepath, picoscope_filepath)
+# Load data
+ltspice_data = load_ltspice_data(ltspice_filepath)
+matlab_data = load_matlab_data(matlab_filepath)
+picoscope_data = load_picoscope_data(picoscope_filepath)
+
+# Generate plots
+plot_ltspice_data(ltspice_data)
+plot_matlab_data(matlab_data)
+plot_picoscope_data(picoscope_data)
+plot_data_comparison(ltspice_data, matlab_data, picoscope_data)
